@@ -1,0 +1,10 @@
+{
+  "name": "back-end-coursework",
+  "version": "1.0.0",
+  "author": "Philip Griffin",
+  "dependencies": {
+    "express": "^5.1.0",
+    "lodash": "^4.17.21",
+    "mustache": "^4.2.0"
+  }
+}
