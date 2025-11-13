@@ -5,6 +5,8 @@ var fs = require("fs");
 
 var app = express();
 
+const uri = "mongodb+srv://philipgriffin03_db_user:<6w£pW)m13%3f>@cluster0.rfwrbbl.mongodb.net/"
+
 
 app.use(function(req, res, next) {//use in code
     console.log("Request IP: " + req.url);
