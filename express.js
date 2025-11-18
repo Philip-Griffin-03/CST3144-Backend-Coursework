@@ -6,8 +6,7 @@ var fs = require("fs");
 var cors = require("cors");
 var { MongoClient } = require("mongodb");
 
-app.use(cors());//allows frontend to call api
-app.use(express.json());//parses requests as json
+
 
 
 var app = express();
@@ -17,6 +16,8 @@ const dbname = "Webstore";
 
 let db;
 
+app.use(cors());//allows frontend to call api
+app.use(express.json());//parses requests as json
 
 
 app.use(function(req, res, next) {//use in code
