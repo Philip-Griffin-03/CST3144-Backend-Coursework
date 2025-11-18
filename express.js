@@ -12,7 +12,7 @@ var app = express();
 const uri = "mongodb+srv://philipgriffin03_db_user:6w%C2%A3pW%29m13%253f@cluster0.rfwrbbl.mongodb.net/"
 const dbname = "Webstore";
 
-let db;
+let dbname;
 
 app.use(cors());//allows frontend to call api
 app.use(express.json());//parses requests as json
@@ -49,7 +49,7 @@ app.use("/img", function(req, res, next) {
 
 app.get("/lessons", async (req, res) => {
     try {
-        const lessons = await db.collection("Lessons").find({}).toArray();
+        const lessons = await dbname.collection("Lessons").find({}).toArray();
         res.json(lessons);
     } catch (err) {
         console.error("Error fetching lessons:", err);
