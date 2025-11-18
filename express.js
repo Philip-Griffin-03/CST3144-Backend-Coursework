@@ -57,9 +57,6 @@ MongoClient.connect(uri)
 
 
 
-
-
-
 app.get("/lessons", async (req, res) => {
     try {
         const lessons = await db.collection("Lessons").find({}).toArray();
@@ -73,9 +70,21 @@ app.get("/lessons", async (req, res) => {
 
 
 
-app.post("/checkout", function(req, res){
+app.post("/checkout", async function(req, res){
+    try{
+        const order = req.body;
 
+        const result = await db.collection("Orders").insertOne(order);
+
+        res.json({ success: true, orderId: result.insertId });
+    } catch (err) {
+        console.error("Error creating order: ", err);
+        res.status(500).json({ error: "Failed to create order"});
+    }
 });
+
+
+
 
 app.put("/lessons", function(req, res){
 
