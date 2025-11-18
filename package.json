@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "author": "Philip Griffin",
   "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "lodash": "^4.17.21",
+    "mongodb": "^7.0.0",
     "mustache": "^4.2.0"
   },
   "scripts": {
