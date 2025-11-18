@@ -86,7 +86,28 @@ app.post("/checkout", async (req, res) => {
 
 
 
-app.put("/lessons", function(req, res){
+app.put("/lessons/:id", async (req, res) => {
+    const lessonId = Number(req.params.id);
+    const {quantity} = req.body;
+
+    if(!Number.isInteger(lessonId) || !Number.isInteger(quantity) || quantity <= 0) {
+        return res.status(400).json({error: "Invalid lesson id or quantity"});
+    }
+
+    try {
+        const result = await db.collection("Lessons").updateOne(
+            {id: lessonId, space: {$gte: quantity} },
+            {$inc: {space: -quantity} }
+        );
+
+        if (result.matchedCount === 0) {
+            return res.status(404).json({error: "Lessons not found or not enough space"});
+        }
+
+    } catch (err) {
+        console.error("Error updating lesson:", err);
+        res.status(500).json({error: "Failed to update lesson"});
+    }
 
 });
 
