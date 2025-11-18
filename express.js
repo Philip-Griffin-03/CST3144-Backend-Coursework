@@ -3,7 +3,7 @@ var express = require("express");
 var path = require("path");
 var fs = require("fs");
 
-const cors = require("cors");
+var cors = require("cors");
 var { MongoClient } = require("mongodb");
 
 app.use(cors());//allows frontend to call api
