@@ -70,7 +70,7 @@ app.get("/lessons", async (req, res) => {
 
 
 
-app.post("/checkout", async function(req, res){
+app.post("/checkout", async (req, res) => {
     try{
         const order = req.body;
 
