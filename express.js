@@ -41,7 +41,7 @@ app.use("/img", function(req, res, next) {
 
 
 
-
+//s
 
 
 
@@ -49,7 +49,7 @@ app.use("/img", function(req, res, next) {
 
 app.get("/lessons", async (req, res) => {
     try {
-        const lessons = await db.collection("lessons").find({}).toArray();
+        const lessons = await db.collection("Lessons").find({}).toArray();
         res.json(lessons);
     } catch (err) {
         console.error("Error fetching lessons:", err);
