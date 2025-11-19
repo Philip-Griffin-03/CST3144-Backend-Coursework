@@ -76,7 +76,7 @@ app.post("/checkout", async (req, res) => {
 
         const result = await db.collection("Orders").insertOne(order);
 
-        res.json({ success: true, orderId: result.insertId });
+        res.json({ success: true, orderId: result.insertedId });
     } catch (err) {
         console.error("Error creating order: ", err);
         res.status(500).json({ error: "Failed to create order"});
