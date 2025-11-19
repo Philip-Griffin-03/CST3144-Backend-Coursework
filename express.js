@@ -104,6 +104,8 @@ app.put("/lessons/:id", async (req, res) => {
             return res.status(404).json({error: "Lessons not found or not enough space"});
         }
 
+        return res.json({ success: true, updatedCount: result.modifiedCount });
+
     } catch (err) {
         console.error("Error updating lesson:", err);
         res.status(500).json({error: "Failed to update lesson"});
