@@ -88,43 +88,29 @@ app.post("/checkout", async (req, res) => {
 
 app.put("/lessons/:id", async (req, res) => {
     const lessonId = Number(req.params.id);
-    const updates = req.body; // e.g. { "space": 3 } or { "price": 25, "location": "Hendon" }
+    const {quantity} = req.body;
 
-    console.log("PUT /lessons/:id called");
-    console.log("lessonId:", lessonId);
-    console.log("updates:", updates);
-
-    if (!Number.isInteger(lessonId)) {
-        return res.status(400).json({ error: "Invalid lesson id", lessonId });
-    }
-
-    if (!updates || Object.keys(updates).length === 0) {
-        return res.status(400).json({ error: "No fields to update provided" });
+    if(!Number.isInteger(lessonId) || !Number.isInteger(quantity) || quantity <= 0) {
+        return res.status(400).json({error: "Invalid lesson id or quantity"});
     }
 
     try {
-        const result = await db.collection("Lessons").findOneAndUpdate(
-            { id: lessonId },     // filter: numeric id in your documents
-            { $set: updates },    // set whatever fields are provided
-            { returnDocument: "after" }
+        const result = await db.collection("Lessons").updateOne(
+            {id: lessonId, space: {$gte: quantity} },
+            {$inc: {space: -quantity} }
         );
 
-        console.log("MongoDB update result:", result);
-
-        if (!result.value) {
-            return res
-                .status(404)
-                .json({ error: "Lesson not found", lessonId });
+        if (result.matchedCount === 0) {
+            return res.status(404).json({error: "Lessons not found or not enough space"});
         }
 
-        return res.json({
-            success: true,
-            lesson: result.value
-        });
+        return res.json({ success: true, updatedCount: result.modifiedCount });
+
     } catch (err) {
         console.error("Error updating lesson:", err);
-        res.status(500).json({ error: "Failed to update lesson" });
+        res.status(500).json({error: "Failed to update lesson"});
     }
+
 });
 
 
