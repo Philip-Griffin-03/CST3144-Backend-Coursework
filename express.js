@@ -88,30 +88,42 @@ app.post("/checkout", async (req, res) => {
 
 app.put("/lessons/:id", async (req, res) => {
     const lessonId = Number(req.params.id);
-    const {quantity} = req.body;
+    const { space } = req.body;
 
-    if(!Number.isInteger(lessonId) || !Number.isInteger(quantity) || quantity <= 0) {
-        return res.status(400).json({error: "Invalid lesson id or quantity"});
+    console.log("PUT /lessons/:id");
+    console.log("lessonId:", lessonId, "space:", space);
+
+    // validate id and space
+    if (!Number.isInteger(lessonId)) {
+        return res.status(400).json({ error: "Invalid lesson id" });
+    }
+
+    if (!Number.isInteger(space) || space < 0) {
+        return res.status(400).json({ error: "Invalid space value" });
     }
 
     try {
         const result = await db.collection("Lessons").updateOne(
-            {id: lessonId, space: {$gte: quantity} },
-            {$inc: {space: -quantity} }
+            { id: lessonId },         // find lesson by numeric id
+            { $set: { space: space } } // set space to this exact number
         );
 
+        console.log("updateOne result:", result);
+
         if (result.matchedCount === 0) {
-            return res.status(404).json({error: "Lessons not found or not enough space"});
+            return res.status(404).json({ error: "Lesson not found" });
         }
 
-        return res.json({ success: true, updatedCount: result.modifiedCount });
-
+        return res.json({
+            success: true,
+            updatedCount: result.modifiedCount
+        });
     } catch (err) {
         console.error("Error updating lesson:", err);
-        res.status(500).json({error: "Failed to update lesson"});
+        res.status(500).json({ error: "Failed to update lesson" });
     }
-
 });
+
 
 
 
