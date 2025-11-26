@@ -90,8 +90,12 @@ app.put("/lessons/:id", async (req, res) => {
     const lessonId = Number(req.params.id);
     const updates = req.body; // e.g. { "space": 3 } or { "price": 25, "location": "Hendon" }
 
+    console.log("PUT /lessons/:id called");
+    console.log("lessonId:", lessonId);
+    console.log("updates:", updates);
+
     if (!Number.isInteger(lessonId)) {
-        return res.status(400).json({ error: "Invalid lesson id" });
+        return res.status(400).json({ error: "Invalid lesson id", lessonId });
     }
 
     if (!updates || Object.keys(updates).length === 0) {
@@ -99,21 +103,30 @@ app.put("/lessons/:id", async (req, res) => {
     }
 
     try {
-        const result = await db.collection("Lessons").updateOne(
-            { id: lessonId },
-            { $set: updates }
+        const result = await db.collection("Lessons").findOneAndUpdate(
+            { id: lessonId },     // filter: numeric id in your documents
+            { $set: updates },    // set whatever fields are provided
+            { returnDocument: "after" }
         );
 
-        if (result.matchedCount === 0) {
-            return res.status(404).json({ error: "Lesson not found" });
+        console.log("MongoDB update result:", result);
+
+        if (!result.value) {
+            return res
+                .status(404)
+                .json({ error: "Lesson not found", lessonId });
         }
 
-        return res.json({ success: true, updatedCount: result.modifiedCount });
+        return res.json({
+            success: true,
+            lesson: result.value
+        });
     } catch (err) {
         console.error("Error updating lesson:", err);
         res.status(500).json({ error: "Failed to update lesson" });
     }
 });
+
 
 
 
