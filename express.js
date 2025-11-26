@@ -20,7 +20,7 @@ app.use(cors());//allows frontend to call api
 app.use(express.json());//parses requests as json
 
 
-app.use(function(req, res, next) {//use in code
+app.use(function(req, res, next) {
     console.log("Request IP: " + req.url);
     console.log("Request date: " + new Date());
     next();
@@ -118,7 +118,7 @@ app.put("/lessons/:id", async (req, res) => {
 
 
 
-app.use(function(req, res) {//change around
+app.use(function(req, res) {
     res.status(404);
     res.send("File not found!");
 });
