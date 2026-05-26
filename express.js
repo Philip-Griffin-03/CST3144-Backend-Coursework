@@ -11,7 +11,7 @@ var { MongoClient } = require("mongodb");
 
 var app = express();
 
-const uri = "mongodb+srv://philipgriffin03_db_user:6w%C2%A3pW%29m13%253f@cluster0.rfwrbbl.mongodb.net/"
+const uri = "example"
 const dbname = "Webstore";
 
 let db;
